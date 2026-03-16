@@ -16,17 +16,17 @@
 识别正确结果：从所有解密结果中筛选出有意义的英文短语，确定正确密钥和明文。
 
 4. 实验结果
-解密后的明文：LEARNINGPYTHONISINTERESTING（拆分后为 LEARNING PYTHON IS INTERESTING，即 “学习 Python 很有趣”）。
+解密后的明文：TALKISCHEAPSHOWMETHECODE（拆分后为 TALK IS CHEAP SHOW ME THE CODE，即 “学习 Python 很有趣”）。
 
 
 
 1. 结果判断依据
 凯撒密码破解的核心是识别 “有意义的明文”：
 
-所有密钥的解密结果中，仅 k=4 对应的字符串是符合英文语义的短语（LEARNINGPYTHONISINTERESTING）；
+所有密钥的解密结果中，仅 k=20 对应的字符串是符合英文语义的短语（TALKISCHEAPSHOWMETHECODE）；
 其他密钥的解密结果均为无意义的字母组合，无法构成通顺的英文表达。
 
-6. 实验总结
+1. 实验总结
 
 穷举法适用于密钥空间小的加密算法（如凯撒密码），核心是枚举所有可能的密钥并验证结果；
 凯撒密码的安全性极低，仅需简单枚举即可破解，无实际加密价值；
@@ -34,6 +34,6 @@
 
 三、关键点回顾
 
-凯撒密码解密核心：字母向前位移 k 位，超出 A 则循环到 Z（如密文字母 N，k=4 时，N-4=L）；
+凯撒密码解密核心：字母向前位移 k 位，超出 A 则循环到 Z（如密文字母 N，k=20 时，N-20=L）；
 穷举法逻辑：遍历 1~25 所有密钥，逐一解密并输出结果；
-正确结果识别：k=4 时解密出有意义的英文短语 LEARNINGPYTHONISINTERESTING，为唯一正确解。
+正确结果识别：k=20 时解密出有意义的英文短语 ，TALKISCHEAPSHOWMETHECODE为唯一正确解。
