@@ -11,7 +11,7 @@ plaintext = b"The secret message is: when using a stream cipher, never use the k
 key_stream = bytes(t ^ p for t, p in zip(target_bytes, plaintext))
 decrypted = bytes(t ^ k for t, k in zip(target_bytes, key_stream))
 
-# 输出结果
+# 输出结果：
 print("解密成功！")
 print("明文内容：")
 print(decrypted.decode('ascii'))
