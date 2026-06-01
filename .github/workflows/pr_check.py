@@ -126,7 +126,7 @@ def get_changed_files_full():
 
 
 def get_file_content(file_path: str):
-    """获取文件内容，超长自动截断"""
+    """获取学生提交的文件内容（用 HEAD_SHA），超长自动截断"""
     try:
         data = gh_get(
             f"/repos/{REPO}/contents/{requests.utils.quote(file_path, safe='/')}",
@@ -139,12 +139,32 @@ def get_file_content(file_path: str):
             if len(content) > MAX_CONTENT_LENGTH:
                 content = content[:MAX_CONTENT_LENGTH] + "\n...(truncated)"
             return content
-    except Exception:
+    except Exception as e:
+        print(f"  [debug] get_file_content 失败: {file_path} → {e}")
+        return None
+
+
+def get_file_content_main(file_path: str):
+    """获取主分支文件内容（作业要求、截止时间等），固定读 main 分支，超长自动截断"""
+    try:
+        data = gh_get(
+            f"/repos/{REPO}/contents/{requests.utils.quote(file_path, safe='/')}",
+            params={"ref": "main"},
+        )
+        if data.get("encoding") == "base64":
+            content = base64.b64decode(data["content"]).decode(
+                "utf-8", errors="replace"
+            )
+            if len(content) > MAX_CONTENT_LENGTH:
+                content = content[:MAX_CONTENT_LENGTH] + "\n...(truncated)"
+            return content
+    except Exception as e:
+        print(f"  [debug] get_file_content_main 失败: {file_path} → {e}")
         return None
 
 
 def get_homework_files(lab: str) -> dict:
-    """读取 homework/LabX 下所有文件内容，返回 {path: content}"""
+    """读取 homework/LabX 下所有文件内容，返回 {path: content}（固定读 main 分支）"""
     result = {}
     try:
         tree = gh_get(f"/repos/{REPO}/git/trees/HEAD", params={"recursive": "1"})
@@ -155,7 +175,7 @@ def get_homework_files(lab: str) -> dict:
             if item["type"] == "blob" and item["path"].startswith(prefix)
         ]
         for p in hw_paths:
-            c = get_file_content(p)
+            c = get_file_content_main(p)
             if c:
                 result[p] = c
     except Exception as e:
@@ -164,7 +184,7 @@ def get_homework_files(lab: str) -> dict:
     # 兜底：直接读 LabX.md
     if not result:
         fallback = f"homework/{lab}/{lab}.md"
-        c = get_file_content(fallback)
+        c = get_file_content_main(fallback)
         if c:
             result[fallback] = c
 
@@ -324,8 +344,8 @@ def extract_required_files(hw_md_content: str) -> set:
 
 
 def check_required_files(student_id_name: str, lab: str, changed_files: list):
-    """精确比对文件名，不依赖 AI"""
-    hw_content = get_file_content(f"homework/{lab}/{lab}.md")
+    """精确比对文件名，不依赖 AI（从 main 分支读作业要求）"""
+    hw_content = get_file_content_main(f"homework/{lab}/{lab}.md")
     if not hw_content:
         print("  [跳过] 未找到作业文件，跳过文件名检查")
         return
@@ -364,7 +384,7 @@ def check_required_files(student_id_name: str, lab: str, changed_files: list):
 
 def get_deadline(lab: str):
     """
-    从 homework/LabX/LabX.md 的"截止时间"行提取截止时间。
+    从 homework/LabX/LabX.md 的"截止时间"行提取截止时间（固定读 main 分支）。
     支持格式：
       2026-05-07                      → 当天 23:59
       2026-04-24                      → 当天 23:59
@@ -372,7 +392,7 @@ def get_deadline(lab: str):
       2026-05-09（下午18:00）          → 18:00
     绝不扫描全文，防止被学生提交内容中的日期干扰。
     """
-    content = get_file_content(f"homework/{lab}/{lab}.md")
+    content = get_file_content_main(f"homework/{lab}/{lab}.md")
     if not content:
         return None
 
@@ -446,7 +466,7 @@ def check_with_deepseek(student_id_name: str, lab: str, changed_files: list):
         print("  [跳过] 未配置 GLM_API_KEY，跳过 GLM 审核")
         return
 
-    # 学生提交的文件内容
+    # 学生提交的文件内容（用 HEAD_SHA 读）
     student_parts = []
     for fpath in changed_files:
         content = get_file_content(fpath)
@@ -456,7 +476,7 @@ def check_with_deepseek(student_id_name: str, lab: str, changed_files: list):
             student_parts.append(f"### 文件：`{fpath}`\n\n（无法读取内容）")
     student_content = "\n\n---\n\n".join(student_parts)
 
-    # 作业要求文件
+    # 作业要求文件（从 main 分支读）
     hw_files = get_homework_files(lab)
     if hw_files:
         hw_content = "\n\n---\n\n".join(
@@ -570,11 +590,11 @@ def main():
     check_file_scope(student_id_name, lab, changed_files)
     print(f"  ✓ 文件修改范围正确")
 
-    # 6. 文件名精确比对（纯代码）
+    # 6. 文件名精确比对（纯代码，从 main 分支读作业要求）
     check_required_files(student_id_name, lab, changed_files)
     print(f"  ✓ 文件列表检查通过")
 
-    # 7. 截止时间检查（纯代码）
+    # 7. 截止时间检查（纯代码，从 main 分支读截止时间）
     check_deadline(lab)
     print(f"  ✓ 截止时间检查通过")
 
