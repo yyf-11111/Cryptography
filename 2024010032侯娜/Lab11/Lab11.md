@@ -1039,13 +1039,13 @@ ls -lh message.txt encrypted_message.bin signature.bin decrypted_message.txt
 
 | 项目 | 你的结果 |
 | :--- | :------- |
-| 签名 RSA 密钥长度（位） |4096 |   
-| 签名私钥 `signature_private_key.pem` 文件大小（字节） |3270 |
+| 签名 RSA 密钥长度（位） |4096|   
+| 签名私钥 `signature_private_key.pem` 文件大小（字节） |3270|
 | 签名公钥 `signature_public_key.pem` 文件大小（字节） |855|
-| 签名公钥指数 e 的值 |65537（0x10001） |
-| 签名公钥模数 N 的前 16 位十六进制 | 00:e5:22:4a:42:e2:ff:05:97:e3:42:4c:771:cf:f1:98:75:90:29:26:ad:c6:3d:70:36:36:38:36:cf:22:76:3f:27|
-| 加密私钥 `encryption_private_key.pem` 文件大小（字节） |3243 |
-| 加密公钥 `encryption_public_key.pem` 文件大小（字节） |800 |
+| 签名公钥指数 e 的值 |65537（0x10001）|
+| 签名公钥模数 N 的前 16 位十六进制| 00:e5:22:4a:42:e2:ff:05:97:e3:42:4c:771:cf:f1:98:75:90:29:26:ad:c6:3d:70:36:36:38:36:cf:22:76:3f:27|
+| 加密私钥 `encryption_private_key.pem` 文件大小（字节） |3243|
+| 加密公钥 `encryption_public_key.pem` 文件大小（字节） |800|
 
 ---
 
@@ -1054,9 +1054,9 @@ ls -lh message.txt encrypted_message.bin signature.bin decrypted_message.txt
 | 项目 | 你的结果 |
 | :--- | :------- |
 | 原始消息内容（你写入的文字） | 这是一条重要信息，需要签名保护。发送者：侯娜，学号：2024010032|
-| 密文文件 encrypted_message.bin 大小（字节） |256 |
-| 密文 SHA-256 哈希值（完整的 64 位十六进制） |0dcac8d324d44b3f4e7fe0291e71809ad54d047771ec8ae14e4666276a1e99c |
-| 密文 SHA-256 哈希值长度（十六进制字符数） | 64|
+| 密文文件 encrypted_message.bin 大小（字节） |256|
+| 密文 SHA-256 哈希值（完整的 64 位十六进制） |0dcac8d324d44b3f4e7fe0291e71809ad54d047771ec8ae14e4666276a1e99c|
+| 密文 SHA-256 哈希值长度（十六进制字符数） |64|
 
 ---
 
