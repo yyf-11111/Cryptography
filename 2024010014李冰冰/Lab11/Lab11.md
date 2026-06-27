@@ -1079,7 +1079,7 @@ ls -lh message.txt encrypted_message.bin signature.bin decrypted_message.txt
 | 解密操作使用的密钥文件 |encryption_private_key.pem（加密私钥）|
 | 签名操作使用的密钥文件 |signature_private_key.pem（签名私钥）|
 | 验证签名操作使用的密钥文件 |signature_public_key.pem（签名公钥）|
-| 接收方应先验证签名还是先解密 |应先验证签名，确认密文未被篡改后再进行解密|
+| 接收方应先验证签名还是先解密 |应先验证签名，再进行解密|
 
 ---
 
