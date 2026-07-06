@@ -1040,13 +1040,13 @@ ls -lh message.txt encrypted_message.bin signature.bin decrypted_message.txt
 
 | 项目 | 你的结果 |
 | :--- | :------- |
-| 签名 RSA 密钥长度（位） | |
-| 签名私钥 `signature_private_key.pem` 文件大小（字节） | |
-| 签名公钥 `signature_public_key.pem` 文件大小（字节） | |
-| 签名公钥指数 e 的值 | |
-| 签名公钥模数 N 的前 16 位十六进制 | |
-| 加密私钥 `encryption_private_key.pem` 文件大小（字节） | |
-| 加密公钥 `encryption_public_key.pem` 文件大小（字节） | |
+| 签名 RSA 密钥长度（位） |2048 |
+| 签名私钥 `signature_private_key.pem` 文件大小（字节） |1.7k |
+| 签名公钥 `signature_public_key.pem` 文件大小（字节） |460 |
+| 签名公钥指数 e 的值 | 65537|
+| 签名公钥模数 N 的前 16 位十六进制 | 截图未见|
+| 加密私钥 `encryption_private_key.pem` 文件大小（字节） |1.7k |
+| 加密公钥 `encryption_public_key.pem` 文件大小（字节） |460 |
 
 ---
 
@@ -1054,10 +1054,10 @@ ls -lh message.txt encrypted_message.bin signature.bin decrypted_message.txt
 
 | 项目 | 你的结果 |
 | :--- | :------- |
-| 原始消息内容（你写入的文字） | |
-| 密文文件 encrypted_message.bin 大小（字节） | |
-| 密文 SHA-256 哈希值（完整的 64 位十六进制） | |
-| 密文 SHA-256 哈希值长度（十六进制字符数） | |
+| 原始消息内容（你写入的文字） | 这是一条重要的消息，需要签名保护。发送者：张三，学号：20240100001|
+| 密文文件 encrypted_message.bin 大小（字节） |256 |
+| 密文 SHA-256 哈希值（完整的 64 位十六进制） |截图未见 |
+| 密文 SHA-256 哈希值长度（十六进制字符数） |64 |
 
 ---
 
@@ -1065,9 +1065,9 @@ ls -lh message.txt encrypted_message.bin signature.bin decrypted_message.txt
 
 | 项目 | 你的结果 |
 | :--- | :------- |
-| 签名文件 signature.bin 大小（字节） | |
-| 原始密文的签名验证结果 | |
-| 篡改密文后的签名验证结果 | |
+| 签名文件 signature.bin 大小（字节） | 256|
+| 原始密文的签名验证结果 | Verified Ok|
+| 篡改密文后的签名验证结果 |Verification failure |
 
 ---
 
@@ -1075,12 +1075,12 @@ ls -lh message.txt encrypted_message.bin signature.bin decrypted_message.txt
 
 | 项目 | 你的结果 |
 | :--- | :------- |
-| 解密后的文件是否与原文件一致 | |
-| 加密操作使用的密钥文件 | |
-| 解密操作使用的密钥文件 | |
-| 签名操作使用的密钥文件 | |
-| 验证签名操作使用的密钥文件 | |
-| 接收方应先验证签名还是先解密 | |
+| 解密后的文件是否与原文件一致 |一致 |
+| 加密操作使用的密钥文件 | encryption_public_key.pem|
+| 解密操作使用的密钥文件 | encryption_private_key.pem|
+| 签名操作使用的密钥文件 |signature_private_key.pem |
+| 验证签名操作使用的密钥文件 |signature_public_key.pem |
+| 接收方应先验证签名还是先解密 | 先验证签名，再解密|
 
 ---
 
